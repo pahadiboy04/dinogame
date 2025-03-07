@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dino Game</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #D3D3D3;
+  }
+  #game-container {
+    width: 900px;
+    height: 550px;
+    border: 2px solid black;
+    margin: 50px auto;
+    position: relative;
+    overflow: hidden;
+    background-image: url('background1.jpg');
+    background-size: cover;
+    background-repeat: repeat-x;
+    animation: moveBackground 3s linear infinite;
+  }
+  @keyframes moveBackground {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -600px 0;
+    }
+  }
+  #dino {
+    width: 130px;
+    height: 100px;
+    background-image: url('dino.png');
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+  }
+  .obstacle {
+    width: 150px;
+    height: 100px;
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+  }
+  #score {
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  #restart {
+    display: none;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    
+     position: absolute;
+     top: 55%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+
+  }
+  
+  #restart, #clue, #exit {
+    display: none;
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+</style>
+</head>
+<body>
+<h1 align="center">Automata 2025 | Stone Paper Scissors</h1>
+<p align="center">"Welcome to Dino Game! 🎯
+  Score 20 points to Unlock the Clue.</p>
+<div id="game-container">
+  <div id="dino"></div>
+  <div id="obstacle1" class="obstacle"></div>
+</div>
+<div id="score">Score: 0</div>
+<button id="restart" onclick="restartGame()">Restart</button>
+<button id="clue" >🎯 Congratulations! Your Clue is: FUTURE KEY</button>
+<button id="exit" onclick="exitGame()">Exit</button>
+<script>
+  let dino = document.getElementById("dino");
+  let obstacle1 = document.getElementById("obstacle1");
+  let scoreDisplay = document.getElementById("score");
+  let restartButton = document.getElementById("restart");
+  let clueButton = document.getElementById("clue");
+  let exitButton = document.getElementById("exit");
+  let isJumping = false;
+  let score = 0;
+  let gameRunning = true;
+  let obstacleImages = ['tree1.png', 'tree2.png', 'tree3.png', 'tree4.png', 'tree5.png', 'tree6.png', 'tree7.png', 'tree8.png'];
+  let speed = 7;
+
+  document.addEventListener("keydown", function(event) {
+    if (event.code === "Space" && !isJumping && gameRunning) {
+      jump();
+    }
+  });
+
+  function jump() {
+    isJumping = true;
+    let position = 0;
+    let jumpInterval = setInterval(() => {
+      if (position >= 100) {
+        clearInterval(jumpInterval);
+        let fallInterval = setInterval(() => {
+          if (position <= 0) {
+            clearInterval(fallInterval);
+            isJumping = false;
+          }
+          position -= 5;
+          dino.style.bottom = position + "px";
+        }, 20);
+      }
+      position += 5;
+      dino.style.bottom = position + "px";
+    }, 20);
+  }
+
+  function moveObstacle(obstacle) {
+    let obstacleInterval = setInterval(() => {
+      if (!gameRunning) {
+        clearInterval(obstacleInterval);
+        return;
+      }
+
+      let obstaclePosition = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+      obstacle.style.left = (obstaclePosition - speed) + "px";
+
+      if (obstaclePosition <= 0) {
+        obstacle.style.left = "580px";
+        obstacle.style.backgroundImage = `url(${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]})`;
+        score++;
+        scoreDisplay.innerHTML = "Score: " + score;
+        if (score % 5 === 0 && speed < 15) {
+          speed += 2;
+        }
+      }
+
+      if (obstaclePosition > 40 && obstaclePosition < 90 && parseInt(window.getComputedStyle(dino).getPropertyValue("bottom")) <= 40) {
+        clearInterval(obstacleInterval);
+        gameRunning = false;
+        restartButton.style.display = "block";
+        document.getElementById("game-container").style.animation = "none";
+      }
+
+      if (score === 20) {
+        clueButton.style.display = "block";
+        exitButton.style.display = "block";
+        clearInterval(obstacleInterval);
+        gameRunning = false;
+        document.getElementById("game-container").style.animation = "none";
+      }
+    }, 20);
+    return obstacleInterval;
+  }
+
+  let obstacleInterval1 = moveObstacle(obstacle1);
+  obstacle1.style.left = "580px";
+  obstacle1.style.backgroundImage = `url(${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]})`;
+
+  function restartGame() {
+    score = 0;
+    speed = 7;
+    scoreDisplay.innerHTML = "Score: 0";
+    restartButton.style.display = "none";
+    gameRunning = true;
+    obstacle1.style.left = "580px";
+    document.getElementById("game-container").style.animation = "moveBackground 3s linear infinite";
+    obstacleInterval1 = moveObstacle(obstacle1);
+  }
+
+  function exitGame() {
+    alert("Game Over!");
+    window.close();
+  }
+</script>
+</body>
+</html>
