@@ -144,7 +144,7 @@
         obstacle.style.backgroundImage = `url(${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]})`;
         score++;
         scoreDisplay.innerHTML = "Score: " + score;
-        if (score % 5 === 0 && speed < 10) {
+        if (score % 5 === 0 && speed < 8) {
           speed += 2;
         }
       }
@@ -173,7 +173,7 @@
 
   function restartGame() {
     score = 0;
-    speed = 7;
+    speed = 6;
     scoreDisplay.innerHTML = "Score: 0";
     restartButton.style.display = "none";
     gameRunning = true;
