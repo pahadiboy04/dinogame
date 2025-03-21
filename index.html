@@ -9,8 +9,22 @@
     margin: 0;
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #D3D3D3;
+    background: url('3.png') no-repeat;
+    background-size:100% 120%;
+    padding: 0;
   }
+  h1 {
+            font-size: 50px;
+            margin-top: 40px;
+            color: #ffeb3b;
+            letter-spacing: 2px;
+        }
+
+  p {
+      font-size: 22px;
+      margin: 10px 0;
+      color: #000000;
+        }
   #game-container {
     width: 900px;
     height: 550px;
@@ -67,7 +81,7 @@
 
   }
   
-  #restart, #clue, #exit {
+  #restart, #exit {
     display: none;
     margin: 10px;
     padding: 10px 20px;
@@ -75,23 +89,46 @@
     background-color: #4CAF50;
     color: white;
     border: none;
-    cursor: pointer;
+    cursor: pointer;}
+    #clue {
+            display: none;
+            font-size: 28px;
+            color: #00e676;
+            margin-top: 40px;
+        }
+
+        #clueButton {
+            margin-top: 25px;
+            padding: 15px 30px;
+            font-size: 22px;
+            border-radius: 10px;
+            background-color: #00c853;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #clueButton:hover {
+            background-color: #00e676;
+        }
 </style>
 </head>
 <body>
-<h1 align="center">Automata 2025 | DIN0SAUR JUMP</h1>
-<p align="center">Welcome to Dino Game! 🎯
-  Score 20 points to Unlock the Clue.
-</p>
-<p align="center"> TO PLAY THE GAME CLICK ON "SPACEBAR" BUTTON
-</p>
+<h1 align="center">Automata 2025 | Stone Paper Scissors</h1>
+<p align="center">"Welcome to Dino Game! 🎯
+  Score 20 points to Unlock the Clue.</p>
 <div id="game-container">
   <div id="dino"></div>
   <div id="obstacle1" class="obstacle"></div>
 </div>
 <div id="score">Score: 0</div>
 <button id="restart" onclick="restartGame()">Restart</button>
-<button id="clue" >🎯 Congratulations! Your Clue is: FUTURE KEY</button>
+<div id="clue">
+  🎯 <strong>Congratulations!</strong> Your Next coding challenge is: <span style="color: #ffeb3b;"></span>
+  <br><br>
+  <button id="clueButton">Question</button>
+</div>
 <button id="exit" onclick="exitGame()">Exit</button>
 <script>
   let dino = document.getElementById("dino");
@@ -147,7 +184,7 @@
         obstacle.style.backgroundImage = `url(${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]})`;
         score++;
         scoreDisplay.innerHTML = "Score: " + score;
-        if (score % 5 === 0 && speed < 8) {
+        if (score % 5 === 0 && speed < 15) {
           speed += 2;
         }
       }
@@ -176,7 +213,7 @@
 
   function restartGame() {
     score = 0;
-    speed = 6;
+    speed = 7;
     scoreDisplay.innerHTML = "Score: 0";
     restartButton.style.display = "none";
     gameRunning = true;
@@ -188,7 +225,11 @@
   function exitGame() {
     alert("Game Over!");
     window.close();
+
   }
+  document.getElementById("clueButton").addEventListener("click", function() {
+    window.open("https://pahadiboy04.github.io/question3/", "_blank");
+});
 </script>
 </body>
 </html>
